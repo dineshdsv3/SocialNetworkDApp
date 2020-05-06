@@ -9,14 +9,21 @@ contract SocialNetwork {
         uint256 id;
         string content;
         uint256 tipAmount;
-        address author;
+        address payable author;
     }
 
     event PostCreated(
         uint256 id,
         string content,
         uint256 tipAmount,
-        address author
+        address payable author
+    );
+
+    event PostTipped(
+        uint256 id,
+        string content,
+        uint256 tipAmount,
+        address payable author
     );
 
     function createPost(string memory _content) public {
@@ -36,6 +43,8 @@ contract SocialNetwork {
         _post.tipAmount = _post.tipAmount + msg.value;
         // Update the original post from the memory _post
         posts[_id] = _post
+
+        emit PostTipped(_id,_post.content,_post.tipAmount,_post.author)
     }
 
 }
