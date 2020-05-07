@@ -32,19 +32,18 @@ contract SocialNetwork {
         emit PostCreated(postCount, _content, 0, msg.sender);
     }
 
-    function tipPost(uint _id) public payable {
+    function tipPost(uint256 _id) public payable {
         // Fetch the post and store it in memory
         Post memory _post = posts[_id];
         // Fetch the author and store it in memory
         address payable _author = _post.author;
         // Transfer money to Author
-        address(_author).transfer(msg.value)
+        address(_author).transfer(msg.value);
         // Update the tip amount
         _post.tipAmount = _post.tipAmount + msg.value;
         // Update the original post from the memory _post
-        posts[_id] = _post
+        posts[_id] = _post;
 
-        emit PostTipped(_id,_post.content,_post.tipAmount,_post.author)
+        emit PostTipped(_id, _post.content, _post.tipAmount, _post.author);
     }
-
 }
