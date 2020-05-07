@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from '../logo.png';
 import './App.css';
 import Web3 from 'web3';
+import Navbar from './Navbar';
 
 class App extends Component {
 	state = {
@@ -37,7 +38,10 @@ class App extends Component {
 	render() {
 		return (
 			<div>
-				<h1>Social Network DApp</h1>
+				<Navbar account={this.state.account} />
+				<div className="container-fluid mt-5">
+					<h1>Social Network DApp</h1>
+				</div>
 			</div>
 		);
 	}
