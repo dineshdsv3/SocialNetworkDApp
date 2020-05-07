@@ -7,7 +7,8 @@ import Web3 from 'web3'
 class App extends Component {
 
   async componentWillMount() {
-    await this.loadWeb3()
+    await this.loadWeb3();
+    await this.loadBlockchainData()
   }
 
   async loadWeb3() {
@@ -21,6 +22,12 @@ class App extends Component {
     else {
       window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
     }
+  }
+
+  async loadBlockchainData() {
+    const web3 = window.web3
+    const accounts = await web3.eth.getAccounts()
+    console.log(accounts)
   }
 
   render() {
