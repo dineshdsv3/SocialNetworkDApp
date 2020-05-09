@@ -55,10 +55,43 @@ class App extends Component {
 		}
 	}
 
+	createPost(content) {
+		this.setState({ loading: true })
+		this.state.socialNetwork.methods.createPost(content).send({ from: this.state.account })
+		.once('receipt', (receipt) => {
+		  this.setState({ loading: false })
+		})
+	  };
+
 	render() {
 		return (
 			<div>
 				<Navbar account={this.state.account} />
+				<div className="container-fluid mt-5">
+					<form
+						onSubmit={(event) => {
+							event.preventDefault();
+							const content = this.postContent.value;
+							this.createPost(content);
+						}}
+					>
+						<div className="form-group mr-sm-2">
+							<input
+								id="postContent"
+								type="text"
+								ref={(input) => {
+									this.postContent = input;
+								}}
+								className="form-control"
+								placeholder="What's on your mind?"
+								required
+							/>
+						</div>
+						<button type="submit" className="btn btn-primary btn-block">
+							Share
+						</button>
+					</form>
+				</div>
 				<div className="container-fluid mt-5">
 					<h1>Social Network DApp</h1>
 					<div className="row">
@@ -86,10 +119,15 @@ class App extends Component {
 												<li key={key} className="list-group-item py-2">
 													<small className="float-left mt-1 text-muted">
 														TIPS:
-														{window.web3.utils.fromWei(post.tipAmount.toString(), 'Ether')}{' '}
+														{window.web3.utils.fromWei(
+															post.tipAmount.toString(),
+															'Ether'
+														)}{' '}
 														ETH
 													</small>
-													<button className="btn btn-link btn-sm float-right pt-0">TIP 0.1 ETH</button>
+													<button className="btn btn-link btn-sm float-right pt-0">
+														TIP 0.1 ETH
+													</button>
 												</li>
 											</ul>
 										</div>
