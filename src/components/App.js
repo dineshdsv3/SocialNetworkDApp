@@ -50,6 +50,7 @@ class App extends Component {
 					posts: [...this.state.posts, post],
 				});
 			}
+			this.setState({ posts: this.state.posts.sort((a, b) => b.tipAmount - a.tipAmount) });
 		} else {
 			window.alert('SocialNetwork contract not deployed to detected network.');
 		}
