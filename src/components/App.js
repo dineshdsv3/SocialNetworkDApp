@@ -66,8 +66,7 @@ class App extends Component {
 	}
 
 	tipPost(id, tipAmount) {
-		this.state.socialNetwork.methods.tipPost(id)
-		.send({ from: this.state.account, value: tipAmount });
+		this.state.socialNetwork.methods.tipPost(id).send({ from: this.state.account, value: tipAmount });
 	}
 
 	render() {
@@ -132,7 +131,14 @@ class App extends Component {
 														)}{' '}
 														ETH
 													</small>
-													<button className="btn btn-link btn-sm float-right pt-0">
+													<button
+														className="btn btn-link btn-sm float-right pt-0"
+														name={post.id}
+														onClick={(event) => {
+															let tipAmount = window.web3.utils.toWei('0.1', 'Ether');
+															this.tipPost(event.target.name, tipAmount);
+														}}
+													>
 														TIP 0.1 ETH
 													</button>
 												</li>
