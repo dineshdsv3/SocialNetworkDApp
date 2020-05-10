@@ -56,12 +56,19 @@ class App extends Component {
 	}
 
 	createPost(content) {
-		this.setState({ loading: true })
-		this.state.socialNetwork.methods.createPost(content).send({ from: this.state.account })
-		.once('receipt', (receipt) => {
-		  this.setState({ loading: false })
-		})
-	  };
+		this.setState({ loading: true });
+		this.state.socialNetwork.methods
+			.createPost(content)
+			.send({ from: this.state.account })
+			.once('receipt', (receipt) => {
+				this.setState({ loading: false });
+			});
+	}
+
+	tipPost(id, tipAmount) {
+		this.state.socialNetwork.methods.tipPost(id)
+		.send({ from: this.state.account, value: tipAmount });
+	}
 
 	render() {
 		return (
