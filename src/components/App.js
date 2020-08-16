@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from '../logo.png';
 import './App.css';
 import Web3 from 'web3';
+import Fortmatic from 'fortmatic';
 import Navbar from './Navbar';
 import SocialNetwork from '../abis/SocialNetwork.json';
 import Identicon from 'identicon.js';
@@ -14,29 +15,36 @@ class App extends Component {
 		posts: [],
 	};
 
-	async componentWillMount() {
+	async componentDidMount() {
 		await this.loadWeb3();
 		await this.loadBlockchainData();
 	}
 
 	async loadWeb3() {
+		let fm = new Fortmatic('pk_test_097457B513F0A02C', 'ropsten');
+		window.web3 = new Web3(fm.getProvider());
+		console.log(fm.getProvider().isFortmatic)
+		console.log(window.web3.currentProvider.isFortmatic )
 		if (window.ethereum) {
+			// Use MetaMask provider
 			window.web3 = new Web3(window.ethereum);
-			await window.ethereum.enable();
-		} else if (window.web3) {
-			window.web3 = new Web3(window.web3.currentProvider);
-		} else {
-			window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!');
-		}
+		  } else {
+			// Use Fortmatic provider
+			window.web3 = new Web3(fm.getProvider());
+			console.log(fm.getProvider().isFortmatic)
+		  }
 	}
 
 	async loadBlockchainData() {
 		const web3 = window.web3;
+		console.log(web3);
 		const accounts = await web3.eth.getAccounts();
 		console.log(accounts);
 		this.setState({ account: accounts[0] });
 		const networkId = await web3.eth.net.getId();
+		console.log(networkId);
 		const networkData = SocialNetwork.networks[networkId];
+		console.log(networkData)
 		if (networkData) {
 			const socialNetwork = web3.eth.Contract(SocialNetwork.abi, networkData.address);
 			this.setState({ socialNetwork });
@@ -51,8 +59,6 @@ class App extends Component {
 				});
 			}
 			this.setState({ posts: this.state.posts.sort((a, b) => b.tipAmount - a.tipAmount) });
-		} else {
-			window.alert('SocialNetwork contract not deployed to detected network.');
 		}
 	}
 
